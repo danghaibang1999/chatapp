@@ -22,7 +22,6 @@ export default function App() {
 	} else {
 		return (
 			<>
-				<StatusBar hidden />
 				<HomeScreen />
 			</>
 		);

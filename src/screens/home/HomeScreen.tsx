@@ -29,38 +29,25 @@ import { fs } from '../../firebase/firebaseConfig';
 import { UserModel } from '../../models/UserModel';
 
 const HomeScreen = () => {
-	
-	const handleAddUser = async () => {
-		users.forEach((user) => {
-			addDoc(collection(fs, `users`), user)
-			.then(() => {
-				console.log('User added successfully');
-		})
-			.catch((error) => {
-				console.log('Error adding user: ', error);
-		});
-		});
-	};
-	
-		
-	// const [users, setUsers] = useState<UserModel[]>([]);
-	// useEffect(() => {
-	// 	onSnapshot(collection(fs, `users`), (snap) => {
-	// 		if (snap.empty) {
-	// 			console.log('Data not found');
-	// 		} else {
-	// 			const items: UserModel[] = [];
-	// 			snap.forEach((item: any) => {
-	// 				items.push({
-	// 					key: item.id,
-	// 					...item.data(),
-	// 				});
-	// 			});
+	const [users, setUsers] = useState<UserModel[]>([]);
 
-	// 			setUsers(items);
-	// 		}
-	// 	});
-	// }, []);
+	useEffect(() => {
+		onSnapshot(collection(fs, `users`), (snap) => {
+			if (snap.empty) {
+				console.log('Data not found');
+			} else {
+				const items: UserModel[] = [];
+				snap.forEach((item: any) => {
+					items.push({
+						key: item.id,
+						...item.data(),
+					});
+				});
+
+				setUsers(items);
+			}
+		});
+	}, []);
 
 	return (
 		<Container>
@@ -69,7 +56,7 @@ const HomeScreen = () => {
 					marginTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
 				}}>
 				<Row>
-					<Avatar photoUrl='https://4kwallpapers.com/images/walls/thumbs_3t/12504.png' />
+					<Avatar photoUrl='https://i.pinimg.com/236x/85/43/a4/8543a4f149305799fd122e882b3c4a80.jpg' />
 					<SpaceComponent width={12} />
 					<TextComponent
 						text='Hello world!!!'
@@ -107,18 +94,14 @@ const HomeScreen = () => {
 					/>
 				</Row>
 			</Section>
-			{/* <Section>
-				<ButtonComponent text='Add User' onPress={handleAddUser}/>
-			</Section> */}
-			{users.length > 0 ? (
+
+			{users.length > 0 && (
 				<FlatList
 					removeClippedSubviews
 					showsVerticalScrollIndicator={false}
 					data={users}
 					renderItem={({ item }) => <UserComponent user={item} />}
 				/>
-			) : (
-				<TextComponent text='Data not found!!!' />
 			)}
 		</Container>
 	);
